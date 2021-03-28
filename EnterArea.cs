@@ -20,6 +20,8 @@ namespace CrusadingNobles
         private Texture2D _background;
         private Vector2 _coords;
         private Color[] _bgColour;
+        private SpriteFont _font;
+        private MouseState _mouseState;
 
         public EnterArea(Game1 game, string currGameScene, int x, int y, string gameSceneToChangeTo, GameSceneManager gameSceneManager) : base(game)
         {
@@ -53,13 +55,18 @@ namespace CrusadingNobles
             base.Initialize();
         }
 
+        protected override void LoadContent()
+        {
+            _font = _game.Content.Load<SpriteFont>("Fonts/Main");
+        }
+
         public override void Update(GameTime gameTime)
         {
-            MouseState mouseState = Mouse.GetState();
-            if (MouseIsInBounds(mouseState.X, mouseState.Y))
+            _mouseState = Mouse.GetState();
+            if (MouseIsInBounds(_mouseState.X, _mouseState.Y))
             {
                 Mouse.SetCursor(MouseCursor.Hand);
-                if (mouseState.LeftButton == ButtonState.Pressed)
+                if (_mouseState.LeftButton == ButtonState.Pressed)
                 {
                     _gameSceneManager.SwitchScene(_gameSceneToChangeTo);
                     return;
@@ -76,6 +83,12 @@ namespace CrusadingNobles
         {
             _game.GetSpriteBatch().Begin();
             _game.GetSpriteBatch().Draw(_background, _coords, Color.White);
+
+
+            if (MouseIsInBounds(_mouseState.X, _mouseState.Y)) {
+                ShowTooltip(_gameSceneToChangeTo, _mouseState.X, _mouseState.Y);
+            }
+
             _game.GetSpriteBatch().End();
             base.Draw(gameTime);
         }
@@ -102,6 +115,11 @@ namespace CrusadingNobles
             }
 
             _background.SetData(_bgColour);
+        }
+
+        private void ShowTooltip(string text, int x, int y)
+        {
+            _game.GetSpriteBatch().DrawString(_font, text, new Vector2((x + 15), (y + 15)), Color.Cyan);
         }
     }
 }
