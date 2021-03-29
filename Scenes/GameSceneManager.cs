@@ -20,9 +20,9 @@ namespace CrusadingNobles
             AddScenes();
         }
 
-        public string GetPreviousScene()
+        public GameScene GetGameScene(string sceneName)
         {
-            return _previousScene;
+            return _scenes[sceneName];
         }
 
         public void SwitchScene(string sceneName)
@@ -34,7 +34,9 @@ namespace CrusadingNobles
 
             _previousScene = sceneName;
             GameScene scene = _scenes[sceneName];
-            GameComponent[] sceneComponents = scene.GetComponents();
+            SceneContainer sceneContainer = scene.GetSceneContainer();
+            List<GameComponent> sceneComponents = sceneContainer.sceneComponents;
+            sceneComponents.Add(sceneContainer);
 
             foreach (GameComponent component in _game.Components)
             {
@@ -49,19 +51,17 @@ namespace CrusadingNobles
         {
             AddScene(
                 "menuScene",
-                new SceneContainerWorldMap(_game, "world-map"),
-                new EnterArea(_game, "menuScene", 630, 480, "gameplayScene", this, 60, 60)
+                new SceneContainerWorldMap(_game, "world-map", "menuScene", "World Map")
             );
             AddScene(
                 "gameplayScene",
-                new SceneContainerCity(_game, "city"),
-                new EnterArea(_game, "gameplayScene", 0, 0, "menuScene", this, 60, 60)
+                new SceneContainerCity(_game, "city", "gameplayScene", "The City")
             );
         }
 
-        private void AddScene(string sceneName, params GameComponent[] sceneComponents)
+        private void AddScene(string sceneName, SceneContainer sceneContainer)
         {
-            GameScene scene = new GameScene(_game, sceneComponents);
+            GameScene scene = new GameScene(_game, sceneContainer);
             _scenes.Add(sceneName, scene);
         }
     }

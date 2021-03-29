@@ -13,11 +13,16 @@ namespace CrusadingNobles
         protected Texture2D _background;
         protected Rectangle _backgroundContainer;
         protected string _backgroundImageName;
+        public string sceneName { get; }
+        public string sceneTitle { get; }
+        public List<GameComponent> sceneComponents { get; set; }
 
-        public SceneContainer(Game1 game, string backgroundImageName) : base(game)
+        public SceneContainer(Game1 game, string backgroundImageName, string sceneMachineName, string titleOfScene) : base(game)
         {
             _game = game;
             _backgroundImageName = backgroundImageName;
+            sceneName = sceneMachineName;
+            sceneTitle = titleOfScene;
         }
 
         public override void Initialize()
@@ -38,6 +43,17 @@ namespace CrusadingNobles
             _game.GetSpriteBatch().Draw(_background, new Vector2(0, 0), _backgroundContainer, Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
             _game.GetSpriteBatch().End();
             base.Draw(gameTime);
+        }
+
+        protected void AddSceneComponents(List<GameComponent> sceneComponents)
+        {
+            foreach (GameComponent component in sceneComponents)
+            {
+                if (!_game.Components.Contains(component))
+                {
+                    _game.Components.Add(component);
+                }
+            }
         }
     }
 }

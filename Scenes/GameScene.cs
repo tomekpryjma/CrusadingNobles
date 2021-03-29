@@ -7,33 +7,28 @@ namespace CrusadingNobles
 {
     public class GameScene
     {
-        private List<GameComponent> _components;
+        private SceneContainer _sceneContainer;
         private Game1 _game;
 
-        public GameScene(Game1 game, params GameComponent[] components)
+        public GameScene(Game1 game, SceneContainer sceneContainer)
         {
             _game = game;
-            _components = new List<GameComponent>();
+            AddSceneContainer(sceneContainer);
+        }
 
-            foreach (GameComponent component in components)
+        public void AddSceneContainer(SceneContainer sceneContainer)
+        {
+            _sceneContainer = sceneContainer;
+
+            if (! _game.Components.Contains(sceneContainer))
             {
-                AddComponent(component);
+                _game.Components.Add(sceneContainer);
             }
         }
 
-        public void AddComponent(GameComponent component)
+        public SceneContainer GetSceneContainer()
         {
-            _components.Add(component);
-
-            if (! _game.Components.Contains(component))
-            {
-                _game.Components.Add(component);
-            }
-        }
-
-        public GameComponent[] GetComponents()
-        {
-            return _components.ToArray();
+            return _sceneContainer;
         }
     }
 }

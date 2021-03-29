@@ -86,7 +86,7 @@ namespace CrusadingNobles
 
 
             if (MouseIsInBounds(_mouseState.X, _mouseState.Y)) {
-                ShowTooltip(_gameSceneToChangeTo, _mouseState.X, _mouseState.Y);
+                ShowTooltip(_game.gameSceneManager.GetGameScene(_gameSceneToChangeTo).GetSceneContainer().sceneTitle, _mouseState.X, _mouseState.Y);
             }
 
             _game.GetSpriteBatch().End();
